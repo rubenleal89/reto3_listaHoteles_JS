@@ -15,6 +15,7 @@
 
 .div-img{
     width: 30%;
+    position: relative;
 }
 
 .div-img img{
@@ -28,7 +29,7 @@
     padding: 10px;
 }
 
-.div-descripcion h2{
+.div-descripcion a{
     color: #0668B7;
     font-size: 1.5rem;
 }
@@ -42,4 +43,76 @@
 
 .fa-star{
     color: #FDB02A;
+}
+
+.estrallaGris{
+    color: gray;
+}
+
+.fa-heart{
+    color: #035294;
+    font-size: 1.5rem;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+}
+
+.div-img .favorito{
+    color: red;
+    font-weight: 900;
+}
+
+.linkTitle{
+    text-decoration: none;
+}
+
+/***************************************************************************/
+
+.div-review{
+    border: 1px solid gray;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 15px;
+}
+
+.div-review h2{
+    color: #0668B7;
+    font-size: 1.5rem;
+    margin-bottom: 5px;
+}
+
+.formulario{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+    border: 1px solid gray;
+    padding: 10px;
+    border-radius: 15px;
+    margin: auto;
+}
+
+.formulario input{
+    width: 50%;
+    margin: 5px;
+    outline: none;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid gray;
+}
+
+.textAreaDescripcion{
+    width: 50%;
+    border-radius: 10px;
+    padding: 10px;
+    resize: none;
+}
+
+.buttonComentario{
+    width: 30%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid gray;
+    background-color: #0668B7;
 }
