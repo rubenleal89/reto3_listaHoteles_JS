@@ -82,15 +82,27 @@
     margin-bottom: 5px;
 }
 
-.formulario{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.sect-formulario{
     width: 50%;
     border: 1px solid gray;
     padding: 10px;
     border-radius: 15px;
     margin: auto;
+}
+
+.formulario{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.btnRegreso{
+    width: 30%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid gray;
+    background-color: #0a76b4;
+    margin: 5px 35%;
 }
 
 .formulario input{
