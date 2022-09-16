@@ -11,12 +11,12 @@ let cargarHoteles = async()=> {
         <div class="div-hotel">
             <div class="div-img">
                 <img src="${element.thumbnail}" alt="${element.title}">
-                <i>corazon</i>
+                <i class="fa-regular fa-heart"></i>
             </div>
             <div class="div-descripcion">
                 <div class="div-title-rating">
                     <a class="linkTitle" href="reviewHoteles.html">${element.title}</a>
-                    <i>estrellas</i>
+                    ${verRating(element.rating)}
                 </div>
                 <p>${element.description}</p>
             </div>
@@ -28,6 +28,21 @@ let cargarHoteles = async()=> {
   catch(error){
     alert(error)
   }
+
+function verRating(rating){
+  let imprimirRating = "";
+  for(i=0; i < rating; i++){
+    imprimirRating += `
+        <i class="fa-solid fa-star"></i>
+      `
+  }
+  for(j=0; j< (5-rating); j++){
+    imprimirRating += `
+        <i class="fa-solid fa-star estrallaGris"></i>
+      `
+  }
+  return imprimirRating;
+}
 
 
   let hoteles = await fetch("https://my-json-server.typicode.com/manuelmebm/testing-hotel-api/hotels");
