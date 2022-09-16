@@ -115,15 +115,23 @@ let arrayReview = [
 ]
 localStorage.setItem("Lista Review",JSON.stringify(arrayReview));
 
+let validarHoteles = false;
+
 function crearElements(){
-  arrayHoteles = JSON.parse(localStorage.getItem("Lista Hoteles"));
+  let verHoteles;
+  if(validarHoteles === true){ // Validar que boton se oprimio e imprimir su array
+    verHoteles = JSON.parse(localStorage.getItem("Hoteles Favoritos"));
+  }
+  else{
+    verHoteles = JSON.parse(localStorage.getItem("Lista Hoteles")); // Trae los valores del local
+  }
   let section = document.getElementById("sect-hoteles");
   section.innerHTML="";
-    if(arrayHoteles === null){
-      arrayHoteles=[];
+    if(verHoteles === null){
+      verHoteles=[];
     }
     else{
-      arrayHoteles.forEach(element => {
+      verHoteles.forEach(element => {
         let divHotel = document.createElement("div");
         divHotel.className="div-hotel"
         let divImg = document.createElement("div");
@@ -135,12 +143,12 @@ function crearElements(){
         imgFavotiro.addEventListener("click",(e)=>{
           hotelFavorito(imgFavotiro,element.id);
         });
-        // if(element.favorito === "true"){
-        //   imgFavotiro.className="fa-regular fa-heart favorito";
-        // }
-        // else{
-        //   imgFavotiro.className="fa-regular fa-heart";
-        // }
+        if(element.favorito === "true"){
+          imgFavotiro.className="fa-regular fa-heart favorito";
+        }
+        else{
+          imgFavotiro.className="fa-regular fa-heart";
+        }
         let divDescripcion = document.createElement("div");
         divDescripcion.className = "div-descripcion"
         let divTitleRating = document.createElement("div");
@@ -164,6 +172,7 @@ function crearElements(){
       divDescripcion.insertAdjacentElement("beforeend",divTitleRating);
       divTitleRating.insertAdjacentElement("beforeend",title);
       divDescripcion.insertAdjacentElement("beforeend",description );
+      
       let estrellasGris = 5 - element.rating;
       for(i=0; i <  element.rating; i++){
         let rating = document.createElement("i");
@@ -176,7 +185,33 @@ function crearElements(){
         divTitleRating.insertAdjacentElement("beforeend",rating);
       }
       });
+
+      let btnHotelesFavoritos= document.createElement("button");
+      btnHotelesFavoritos.className="btn-HtFav";
+
+      if(validarHoteles === true){
+        validarHoteles = false;
+        btnHotelesFavoritos.textContent="Ver todos los Hoteles"
+        btnHotelesFavoritos.addEventListener("click",crearElements);
+      }
+      else{
+        btnHotelesFavoritos.textContent="Hoteles Favoritos"
+        btnHotelesFavoritos.addEventListener("click",verHotelesFav);
+      }
+      let divBtnHtFavorito = document.createElement("div");
+      divBtnHtFavorito.className="div-HtFav";
+      section.insertAdjacentElement("beforeend",divBtnHtFavorito);
+      divBtnHtFavorito.insertAdjacentElement("beforeend",btnHotelesFavoritos);
     }
+}
+
+function verHotelesFav(){
+  validarHoteles = true;
+  let Hoteles = JSON.parse(localStorage.getItem("Lista Hoteles"));
+  let hotelesFav = Hoteles.filter(element => element.favorito === "true");
+  localStorage.setItem("Hoteles Favoritos",JSON.stringify(hotelesFav));
+  console.table(hotelesFav);
+  crearElements();
 }
 
 function imprimirReview(hotelId){
@@ -188,13 +223,10 @@ function hotelFavorito(e, id){
   arrayHoteles.forEach(element => {
     if(element.id===id){
       if(element.favorito === "true"){
-        console.log(e);
         e.className="fa-regular fa-heart";
         element.favorito = "false";
-        
       }
       else{
-        console.log(e);
         e.className="fa-regular fa-heart favorito";
         element.favorito = "true";
       }

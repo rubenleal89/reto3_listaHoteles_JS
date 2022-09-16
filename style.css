@@ -96,15 +96,6 @@
     align-items: center;
 }
 
-.btnRegreso{
-    width: 30%;
-    padding: 10px;
-    border-radius: 10px;
-    border: 1px solid gray;
-    background-color: #0a76b4;
-    margin: 5px 35%;
-}
-
 .formulario input{
     width: 50%;
     margin: 5px;
@@ -121,10 +112,17 @@
     resize: none;
 }
 
-.buttonComentario{
+.div-HtFav{
+    text-align: center;
+}
+
+.buttonComentario, .btnRegreso, .btn-HtFav{
     width: 30%;
     padding: 10px;
     border-radius: 10px;
     border: 1px solid gray;
+    color: white;
     background-color: #0668B7;
+    cursor: pointer;
+    margin: 5px 35%;
 }
