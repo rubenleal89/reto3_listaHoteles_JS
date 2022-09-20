@@ -22,7 +22,7 @@ let cargarHoteles = async()=> {
         titleHotel.addEventListener("click",(e)=>{
           mostrarId(element.id);
         })
-        titleHotel.href="reviewHoteles.html";
+        titleHotel.href=`reviewHoteles.html?id=${element.id}`;
         titleHotel.className="linkTitle";
         titleHotel.textContent=element.title;
         let descripcion = document.createElement("p");
