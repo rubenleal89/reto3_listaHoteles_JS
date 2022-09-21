@@ -1,27 +1,30 @@
+validarHoteles = false;
+let dataHoteles;
+
 let cargarHoteles = async()=> {
   try{
-    let hoteles = await fetch("https://my-json-server.typicode.com/manuelmebm/testing-hotel-api/hotels");
+    let hoteles = await fetch(`https://my-json-server.typicode.com/manuelmebm/testing-hotel-api/hotels`);
 
-      let dataHoteles = await hoteles.json();
+      dataHoteles = await hoteles.json();
+      let section = document.getElementById("sect-hoteles");
+      section.innerHTML="";
       dataHoteles.forEach(element => {
-        let section = document.getElementById("sect-hoteles");
         let divHotel = document.createElement("div");
         divHotel.className="div-hotel";
         let divImg = document.createElement("div");
         divImg.className="div-img";
         let imgHotel = document.createElement("img");
         imgHotel.src=element.thumbnail;
-        let iconFavorito = document.createElement("i")
-        iconFavorito.className="fa-regular fa-heart"
-
+        let iconFavorito = document.createElement("i");
+        iconFavorito.className="fa-regular fa-heart";
+        iconFavorito.addEventListener("click",(e)=>{
+          hotelFavorito(iconFavorito,element.id);
+        });
         let divDescripcion = document.createElement("div");
         divDescripcion.className="div-descripcion";
         let divTitleRating = document.createElement("div");
         divTitleRating.className="div-title-rating";
         let titleHotel = document.createElement("a");
-        // titleHotel.addEventListener("click",(e)=>{
-        //   mostrarId(element.id);
-        // })
         titleHotel.href=`reviewHoteles.html?id=${element.id}`;
         titleHotel.className="linkTitle";
         titleHotel.textContent=element.title;
@@ -37,8 +40,9 @@ let cargarHoteles = async()=> {
         divTitleRating.insertAdjacentElement("beforeend",titleHotel);
         divDescripcion.insertAdjacentElement("beforeend",descripcion);
 
-        rating(element.rating,divTitleRating)
+        ratingHoteles(element.rating,divTitleRating);
       });
+      btnCambioFavPrin(section);
   }
   catch(error){
     alert(error);
@@ -46,7 +50,7 @@ let cargarHoteles = async()=> {
   }
 }
 
-function rating(numRating,divTitleRating){
+function ratingHoteles(numRating,divTitleRating){
   for(i=0; i < 5; i++){
     let ratingEx = document.createElement("i");
     ratingEx.className="fa-solid fa-star";
@@ -58,6 +62,39 @@ function rating(numRating,divTitleRating){
       divTitleRating.insertAdjacentElement("beforeend",ratingEx);
     }
   }
+}
+
+function btnCambioFavPrin(section){
+  let btnHotelesFavoritos= document.createElement("button");
+  btnHotelesFavoritos.className="btn-HtFav";
+  if(validarHoteles === true){
+    validarHoteles = false;
+    btnHotelesFavoritos.textContent="Ver todos los Hoteles"
+    btnHotelesFavoritos.addEventListener("click",cargarHoteles);
+  }
+  else{
+    btnHotelesFavoritos.textContent="Ver Hoteles Favoritos"
+    btnHotelesFavoritos.addEventListener("click",verHotelesFav);
+  }
+  let divBtnHtFavorito = document.createElement("div");
+  divBtnHtFavorito.className="div-HtFav";
+  section.insertAdjacentElement("beforeend",divBtnHtFavorito);
+  divBtnHtFavorito.insertAdjacentElement("beforeend",btnHotelesFavoritos);
+}
+
+function verHotelesFav(e){
+  validarHoteles = true;
+  alert("funcion verHotelesFav()")
+  // cargarHoteles();
+}
+
+function hotelFavorito(e, id){
+    if(e.className==="fa-regular fa-heart"){
+      e.className="fa-regular fa-heart favorito";
+    }
+    else{
+      e.className="fa-regular fa-heart";
+    }
 }
 
 cargarHoteles();
