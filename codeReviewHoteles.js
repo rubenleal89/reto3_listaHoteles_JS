@@ -154,7 +154,7 @@ function imprimirHotel(data){
 }
 
 function validaciones(title,description,rating){
-  if (/^[a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/.test(title) && /^\S/.test(description) && /^[0-5]+$/.test(rating)){
+  if (/^[a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/.test(title) && /^\S/.test(description) && /^[0-5]+$/.test(rating) && rating.length === 1){
       crearReview(description,rating,title);
       formulario.reset();
   }
