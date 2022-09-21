@@ -153,8 +153,15 @@ function imprimirHotel(data){
   }
 }
 
-function limpiarFormulario() {
-  document.getElementById("formulario").value = '';
+function validaciones(title,description,rating){
+  if (/^[a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/.test(title) && /^\S/.test(description) && /^[0-5]+$/.test(rating)){
+      crearReview(description,rating,title);
+      formulario.reset();
+  }
+  else {
+      alert("Revice que los datos sean correctos");
+  }
+  
 }
 
 let formulario = document.getElementById("formulario");
@@ -166,8 +173,11 @@ function addReview(e){
   let title = document.getElementById("inputTitulo").value;
   let description = document.getElementById("textAreaDescripcion").value;
   let rating = document.getElementById("rating").value;
-  crearReview(description,rating,title);
-  limpiarFormulario();
+  validaciones(title,description,rating)
 }
+
+// function limpiarFormulario() {
+//   document.getElementById("formulario").value = '';
+// }
 
 document.addEventListener('DOMContentLoaded',mostrarReview);
