@@ -1,14 +1,32 @@
-validarHoteles = false;
-let dataHoteles;
+let validarHoteles = false;
+let validarLike = false; // verificar usabilidad
+let dataHoteles; // hoteles sacados de la Api
+let hotelesFavoritos = []; // hoteles filtrados de favoritos
+let hotelesClick = [];
+
 
 let cargarHoteles = async()=> {
   try{
     let hoteles = await fetch(`https://my-json-server.typicode.com/manuelmebm/testing-hotel-api/hotels`);
-
       dataHoteles = await hoteles.json();
       let section = document.getElementById("sect-hoteles");
       section.innerHTML="";
-      dataHoteles.forEach(element => {
+
+      let verHoteles;
+      if(validarHoteles === true){
+        verHoteles = hotelesFavoritos;
+      }
+      else{
+        if(hotelesClick.length === 0){
+          verHoteles = dataHoteles;
+        }
+        else{
+          verHoteles = hotelesClick;
+        }
+        validarLike = false;
+      }
+
+      verHoteles.forEach(element => {
         let divHotel = document.createElement("div");
         divHotel.className="div-hotel";
         let divImg = document.createElement("div");
@@ -20,6 +38,12 @@ let cargarHoteles = async()=> {
         iconFavorito.addEventListener("click",(e)=>{
           hotelFavorito(iconFavorito,element.id);
         });
+        if(element.favorito === "activo"){
+          iconFavorito.className="fa-regular fa-heart favorito";
+        }
+        else{
+          iconFavorito.className="fa-regular fa-heart";
+        }
         let divDescripcion = document.createElement("div");
         divDescripcion.className="div-descripcion";
         let divTitleRating = document.createElement("div");
@@ -41,6 +65,7 @@ let cargarHoteles = async()=> {
         divDescripcion.insertAdjacentElement("beforeend",descripcion);
 
         ratingHoteles(element.rating,divTitleRating);
+        // pintarCorazones(element.id);
       });
       btnCambioFavPrin(section);
   }
@@ -82,19 +107,68 @@ function btnCambioFavPrin(section){
   divBtnHtFavorito.insertAdjacentElement("beforeend",btnHotelesFavoritos);
 }
 
-function verHotelesFav(e){
+function verHotelesFav(){
   validarHoteles = true;
-  alert("funcion verHotelesFav()")
-  // cargarHoteles();
+  validarLike = true;
+  if(hotelesFavoritos.length === 0){
+    validarHoteles = false;
+    alert("No hay ningun hotel Favorito")
+  }
+  cargarHoteles();
 }
 
 function hotelFavorito(e, id){
-    if(e.className==="fa-regular fa-heart"){
-      e.className="fa-regular fa-heart favorito";
+  let verHoteles;
+  if(hotelesClick.length === 0){
+    verHoteles = dataHoteles;
+    hotelesClick = dataHoteles;
+  }
+  else{
+    verHoteles = hotelesClick;
+  }
+    verHoteles.forEach(element => { // recorro todos los hoteles
+    if(element.id === id){ // traigo el hotel que tenga el ID del elemento cliqueado
+      let hotelFav = verHoteles.find(element => element.id === id); // TRAIGO la PRIMERA coincidencia del array que cumpla la condicion
+      let hotelData = hotelesFavoritos.filter(element => element.id === id); // CREO un ARRAY con el elemento que cumpla la condicion
+      hotelData.favorito = "activo";
+      if(hotelData.length === 0){ // si hotelData encuentra el elemento y lo guarda no lo sube al arrayFavoritos
+        hotelesFavoritos.push(hotelFav); // y los subo al array de hoteles favoritos
+        e.className="fa-regular fa-heart favorito";
+      }
+      else{
+        hotelData.favorito = "inactivo";
+        e.className="fa-regular fa-heart";
+        let idHotel = hotelData[0].id;
+        hotelesFavoritos = hotelesFavoritos.filter(element => element.id !== idHotel);
+        if(validarLike === true){
+          verHotelesFav();
+        }
+      }
     }
-    else{
-      e.className="fa-regular fa-heart";
+  });
+  pintarCorazones(id)
+}
+
+function pintarCorazones(id){
+  let verHoteles;
+  if(hotelesClick.length === 0){
+    verHoteles = dataHoteles;
+    hotelesClick = dataHoteles;
+  }
+  else{
+    verHoteles = hotelesClick;
+  }
+  verHoteles.forEach(element => {
+    if(element.id===id){
+      if(element.favorito === "activo"){
+        element.favorito = "inactivo";
+      }
+      else{
+        element.favorito = "activo";
+      }
     }
+  });
+  hotelesClick = verHoteles;
 }
 
 cargarHoteles();
