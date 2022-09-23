@@ -1,15 +1,21 @@
 let validarHoteles = false;
-let validarLike = false; // verificar usabilidad
+let validarLike = false; // eliminar hoteles al dar dislike
 let dataHoteles; // hoteles sacados de la Api
 let hotelesFavoritos = []; // hoteles filtrados de favoritos
-let hotelesClick = [];
 
 
-let cargarHoteles = async()=> {
-  try{
-    let hoteles = await fetch(`https://my-json-server.typicode.com/manuelmebm/testing-hotel-api/hotels`);
-      dataHoteles = await hoteles.json();
-      let section = document.getElementById("sect-hoteles");
+
+let apiHoteles = fetch("https://my-json-server.typicode.com/manuelmebm/testing-hotel-api/hotels")
+.then((response)=> response.json())
+.then((data)=> {
+  dataHoteles=data
+  cargarHoteles();
+})
+.catch((error)=> console.log(error))
+
+function cargarHoteles(){
+  // debugger
+  let section = document.getElementById("sect-hoteles");
       section.innerHTML="";
 
       let verHoteles;
@@ -17,12 +23,7 @@ let cargarHoteles = async()=> {
         verHoteles = hotelesFavoritos;
       }
       else{
-        if(hotelesClick.length === 0){
-          verHoteles = dataHoteles;
-        }
-        else{
-          verHoteles = hotelesClick;
-        }
+        verHoteles = dataHoteles;
         validarLike = false;
       }
 
@@ -65,14 +66,9 @@ let cargarHoteles = async()=> {
         divDescripcion.insertAdjacentElement("beforeend",descripcion);
 
         ratingHoteles(element.rating,divTitleRating);
-        // pintarCorazones(element.id);
+        
       });
       btnCambioFavPrin(section);
-  }
-  catch(error){
-    alert(error);
-    console.log(error);
-  }
 }
 
 function ratingHoteles(numRating,divTitleRating){
@@ -118,73 +114,43 @@ function verHotelesFav(){
 }
 
 function hotelFavorito(e, id){
-  let verHoteles;
-  if(hotelesClick.length === 0){
-    verHoteles = dataHoteles;
-    hotelesClick = dataHoteles;
-  }
-  else{
-    verHoteles = hotelesClick;
-  }
-    verHoteles.forEach(element => { // recorro todos los hoteles
+  
+  dataHoteles.forEach(element => { // recorro todos los hoteles
     if(element.id === id){ // traigo el hotel que tenga el ID del elemento cliqueado
-      let hotelFav = verHoteles.find(element => element.id === id); // TRAIGO la PRIMERA coincidencia del array que cumpla la condicion
+      let hotelFav = dataHoteles.find(element => element.id === id); // TRAIGO la PRIMERA coincidencia del array que cumpla la condicion
       let hotelData = hotelesFavoritos.filter(element => element.id === id); // CREO un ARRAY con el elemento que cumpla la condicion
-      hotelData.favorito = "activo";
+      // hotelData.favorito = "activo";
       if(hotelData.length === 0){ // si hotelData encuentra el elemento y lo guarda no lo sube al arrayFavoritos
         hotelesFavoritos.push(hotelFav); // y los subo al array de hoteles favoritos
-        e.className="fa-regular fa-heart favorito";
+        
       }
       else{
         hotelData.favorito = "inactivo";
-        e.className="fa-regular fa-heart";
+        
         let idHotel = hotelData[0].id;
         hotelesFavoritos = hotelesFavoritos.filter(element => element.id !== idHotel);
-        if(validarLike === true){
-          verHotelesFav();
-        }
       }
     }
   });
-  pintarCorazones(id)
+  pintarCorazones(e,id)
+  if(validarLike === true){
+    verHotelesFav();
+  }
 }
 
-function pintarCorazones(id){
-  let verHoteles;
-  if(hotelesClick.length === 0){
-    verHoteles = dataHoteles;
-    hotelesClick = dataHoteles;
-  }
-  else{
-    verHoteles = hotelesClick;
-  }
-  verHoteles.forEach(element => {
+function pintarCorazones(e,id){
+  
+  dataHoteles.forEach(element => {
     if(element.id===id){
       if(element.favorito === "activo"){
         element.favorito = "inactivo";
+        e.className="fa-regular fa-heart";
       }
       else{
         element.favorito = "activo";
+        e.className="fa-regular fa-heart favorito";
       }
     }
   });
-  hotelesClick = verHoteles;
+  // hotelesClick = verHoteles;
 }
-
-cargarHoteles();
-
-// let dataHotel = fetch("https://my-json-server.typicode.com/manuelmebm/testing-hotel-api/hotels",{
-//   method: "POST",
-//       headers: {
-//         "Content-Type": "application/stringify",
-//       },
-//       body: JSON.stringify({
-//         "description" : "Hotel muy lujoso",
-//         "hotelId": 1,
-//         "id": 1,
-//         "rating":3,
-//         "title":"Best holiday ever"
-//       })
-// })
-//.then((response)=>response.json())
-//.then((data)=>console.log(data))
